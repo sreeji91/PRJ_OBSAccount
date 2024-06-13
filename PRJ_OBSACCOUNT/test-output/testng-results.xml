@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2024-06-13T12:25:56 IST" name="Default suite" finished-at="2024-06-13T12:26:10 IST" duration-ms="14722">
+    <groups>
+    </groups>
+    <test started-at="2024-06-13T12:25:56 IST" name="Default test" finished-at="2024-06-13T12:26:10 IST" duration-ms="14722">
+      <class name="projectTestCases.Login">
+        <test-method is-config="true" signature="beforeTest()[pri:0, instance:projectTestCases.Login@78691363]" started-at="2024-06-13T12:25:56 IST" name="beforeTest" finished-at="2024-06-13T12:26:05 IST" duration-ms="9583" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeTest -->
+        <test-method signature="logIn()[pri:1, instance:projectTestCases.Login@78691363]" started-at="2024-06-13T12:26:05 IST" name="logIn" finished-at="2024-06-13T12:26:10 IST" duration-ms="5060" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- logIn -->
+        <test-method is-config="true" signature="afterTest()[pri:0, instance:projectTestCases.Login@78691363]" started-at="2024-06-13T12:26:10 IST" name="afterTest" finished-at="2024-06-13T12:26:10 IST" duration-ms="1" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterTest -->
+      </class> <!-- projectTestCases.Login -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
