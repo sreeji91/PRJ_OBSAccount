@@ -6,79 +6,75 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import waitUtility.WaitUtility;
-import webDriverUtility.WebDriverActions;
+import utility.WaitUtility;
+import utility.PageUtility;
 
 public class POMBrands {
-	public static String expected_message="";
+	public static String expected_message = "";
 	WebDriver driver;
-	WebDriverActions objActions;
+	PageUtility objActions;
 	WaitUtility objWait;
-	
+
 	public POMBrands(WebDriver driver) {
-		this.driver=driver;
-		objActions=new WebDriverActions(driver);
+		this.driver = driver;
+		objActions = new PageUtility(driver);
 		PageFactory.initElements(driver, this);
 	}
-	
-	@FindBy (xpath="//span[text()='Brands']")
+
+	@FindBy(xpath = "//span[text()='Brands']")
 	public WebElement brands;
-	
-	@FindBy(xpath="//button[contains(@class,'btn btn-block')]")
+
+	@FindBy(xpath = "//button[contains(@class,'btn btn-block')]")
 	public WebElement addBrandsBtn;
-	
-	@FindBy (xpath="//input[@id='name']")
+
+	@FindBy(xpath = "//input[@id='name']")
 	public WebElement brand_name;
-	
-	@FindBy (xpath="//input[@id='description']")
+
+	@FindBy(xpath = "//input[@id='description']")
 	public WebElement brand_discription;
-	
-	@FindBy(xpath="//button[@class='btn btn-primary']")
+
+	@FindBy(xpath = "//button[@class='btn btn-primary']")
 	public WebElement save_Button;
-	
-	@FindBy (xpath="//*[@id='toast-container']/div")
+
+	@FindBy(xpath = "//*[@id='toast-container']/div")
 	public WebElement popUpMessage;
-	
-	@FindBy (xpath="//div[@id='brands_table_filter']/label/input")
+
+	@FindBy(xpath = "//div[@id='brands_table_filter']/label/input")
 	public WebElement search;
-	
-	@FindBy (xpath="//table[@id='brands_table']/tbody/tr/td[1]")
+
+	@FindBy(xpath = "//table[@id='brands_table']/tbody/tr/td[1]")
 	public WebElement table_value;
-	
+
 	public void brands_click() throws InterruptedException
-	
+
 	{
 		objWait = new WaitUtility(driver);
 		objWait.normalWait(2000);
 		objActions.click(brands);
 	}
-	public void add_brands(String brandName,String brandDescription) throws InterruptedException
-	{
+
+	public void add_brands(String brandName, String brandDescription) throws InterruptedException {
 		objActions.click(addBrandsBtn);
-		objWait=new WaitUtility(driver);
+		objWait = new WaitUtility(driver);
 		objWait.normalWait(2000);
 		objActions.sendkeys(brand_name, brandName);
 		objActions.sendkeys(brand_discription, brandDescription);
 		objActions.click(save_Button);
-		objWait.presenceOfElementlocated(By.xpath("//*[@id='toast-container']/div"),5);
-		String expected_message=objActions.getText(popUpMessage);
-		System.out.println("Expected message= "+expected_message);
-		
-		
+		objWait.presenceOfElementlocated(By.xpath("//*[@id='toast-container']/div"), 5);
+		String expected_message = objActions.getText(popUpMessage);
+
 	}
-	public boolean search_brand(String brand) throws InterruptedException
-	{
+
+	public boolean search_brand(String brand) throws InterruptedException {
 		objActions.click(search);
 		objActions.sendkeys(search, brand);
 		objWait.normalWait(2000);
-		String table_name=objActions.getText(table_value);
-		if(table_name.equalsIgnoreCase(brand))
-		{
+		String table_name = objActions.getText(table_value);
+		if (table_name.equalsIgnoreCase(brand)) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
-		
+
 	}
 }

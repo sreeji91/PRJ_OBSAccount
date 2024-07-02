@@ -1,21 +1,25 @@
 package pomClasses;
 
+import java.io.IOException;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import waitUtility.WaitUtility;
-import webDriverUtility.WebDriverActions;
+import utility.DriverUtility;
+import utility.WaitUtility;
+import utility.PageUtility;
 
 public class POMLogin {
 	WebDriver driver;
-	WebDriverActions objActions;
+	PageUtility objActions;
 	WaitUtility objWait;
 
 	public POMLogin(WebDriver driver) {
 		this.driver = driver;
-		objActions = new WebDriverActions(driver);
+		objActions = new PageUtility(driver);
 		PageFactory.initElements(driver, this);
 	}
 
@@ -30,45 +34,42 @@ public class POMLogin {
 
 	@FindBy(xpath = "//button[text()='End tour']")
 	public WebElement endTourBtn;
-	
+
 	@FindBy(xpath = "//a[@id='tour_step5_menu']")
 	public WebElement product;
-	
-	@FindBy(xpath="/html/body/div[2]/header/nav/div/ul/li[2]/a")
+
+	@FindBy(xpath = "/html/body/div[2]/header/nav/div/ul/li[2]/a")
 	public WebElement profile;
-	
-	@FindBy (xpath="//a[text()='Sign Out']")
+
+	@FindBy(xpath = "//a[text()='Sign Out']")
 	public WebElement signOut;
 
-	public void login(String username, String password)  {
+	public void loginVerification(String username, String password) throws IOException {
+		objWait = new WaitUtility(driver);
 		objActions.sendkeys(webuserName, username);
 		objActions.sendkeys(webpassword, password);
 		objActions.click(webLoginBtn);
-		try {
-		if(endTourBtn.isDisplayed())
-		{
-		objActions.click(endTourBtn);
-		}
-		}
-		catch(Exception e)
-		{
-			System.out.println("handle exception");
-		}
 		
-
+		objWait.presenceOfElementlocated(By.xpath("//button[text()='End tour']"), 8);
+		endTourBtn.click();
+		
+	}
+	public boolean isElementDisplayed() {
+		return product.isDisplayed();
 	}
 	
+
 	public void product_click() throws InterruptedException {
 
 		objActions.click(product);
-		objWait=new WaitUtility(driver);
+		
 		objWait.normalWait(2000);
 
 	}
-	public void signout() throws InterruptedException
-	{
+
+	public void signout() throws InterruptedException {
 		objActions.click(profile);
-		objWait=new WaitUtility(driver);
+		objWait = new WaitUtility(driver);
 		objWait.normalWait(4000);
 		objActions.JavascriptClick(signOut);
 		objWait.normalWait(8000);

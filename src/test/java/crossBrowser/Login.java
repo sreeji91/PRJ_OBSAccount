@@ -6,13 +6,13 @@ import org.testng.asserts.SoftAssert;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 
-import commonUtility.PropertyFileRead;
-import excelUtility.ExcelRead;
-import extendReport.ExtendTestManager;
 import pomClasses.POMLogin;
 import pomClasses.POMUnits;
-import waitUtility.WaitUtility;
-import webDriverUtility.DriverManager;
+import utility.DriverUtility;
+import utility.ExcelUtility;
+import utility.ExtendTestManager;
+import utility.PropertyReadUtility;
+import utility.WaitUtility;
 
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
@@ -31,57 +31,49 @@ public class Login extends ExtendTestManager {
 	POMLogin objPomLogin;
 	ExtentTest test;
 	public ExtentReports extent;
-	
-	static String url = "https://qalegend.com/billing/public/login";
-	//static String browser = "chrome";
-	
+
+	static String url = PropertyReadUtility.readConfigFile("login_url");
+
 	ExtendTestManager objTestManager;
-	
 
 	@Test(priority = 1, enabled = true)
-	
+
 	public void logIn() throws IOException {
-		test=extent.createTest("Validating login scenario");
+		test = extent.createTest("Validating login scenario");
 		boolean Status;
-		String username = ExcelRead.readStringData(1, 0);
-		String password = ExcelRead.integerData(1, 1);
-		objPomLogin.login(username, password);
+		String username = ExcelUtility.readStringData(1, 0);
+		String password = ExcelUtility.integerData(1, 1);
+		objPomLogin.loginVerification(username, password);
 
 		String current_url = driver.getCurrentUrl();
-		SoftAssert asser = new SoftAssert();
-		if(PropertyFileRead.readConfigFile("url").contains(current_url))
-		{
-			
-			asser.assertTrue(true);
-			Status=true;
+		SoftAssert objassert = new SoftAssert();
+		if (PropertyReadUtility.readConfigFile("url").contains(current_url)) {
+
+			objassert.assertTrue(true);
+			Status = true;
+		} else {
+			objassert.assertTrue(false);
+			Status = false;
 		}
-		else {
-			asser.assertTrue(false);
-			Status=false;
-		}
-		
-		asser.assertAll();
-		if(Status==true)
-		{
+
+		objassert.assertAll();
+		if (Status == true) {
 			test.log(com.aventstack.extentreports.Status.PASS, "Login successfully to the application");
-		}
-		else if(Status==false) {
+		} else if (Status == false) {
 			test.log(com.aventstack.extentreports.Status.FAIL, "Login failed");
 		}
-		
-	}
-	
 
+	}
 
 	@BeforeTest(alwaysRun = true)
-	@Parameters({"browser1"})
+	@Parameters({ "browser1" })
 	public void beforeTest(String browser1) {
-		DriverManager objDriverManager = new DriverManager();
+		DriverUtility objDriverManager = new DriverUtility();
 		objDriverManager.launchBrowser(url, browser1);
 		driver = objDriverManager.driver;
 		objPomLogin = new POMLogin(driver);
-		objTestManager=new ExtendTestManager();
-		extent=objTestManager.extendreportgenerate();
+		objTestManager = new ExtendTestManager();
+		extent = objTestManager.extendreportgenerate();
 	}
 
 	@AfterTest

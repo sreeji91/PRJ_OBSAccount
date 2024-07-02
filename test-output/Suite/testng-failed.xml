@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Suite]">
+  <listeners>
+    <listener class-name="testNGUtility.RetryListner"/>
+  </listeners>
   <test thread-count="5" name="Test(failed)">
+    <groups>
+      <run>
+        <include name="failed"/>
+      </run>
+    </groups>
     <classes>
-      <class name="projectTestCases.Login">
+      <class name="sequential.Login">
         <methods>
+          <include name="logInFailed"/>
           <include name="beforeTest"/>
-          <include name="extendreportgenerate"/>
-          <include name="logIn"/>
-          <include name="afterTest"/>
-          <include name="closereport"/>
         </methods>
-      </class> <!-- projectTestCases.Login -->
+      </class> <!-- sequential.Login -->
     </classes>
   </test> <!-- Test(failed) -->
 </suite> <!-- Failed suite [Suite] -->

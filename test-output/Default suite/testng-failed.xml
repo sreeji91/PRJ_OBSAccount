@@ -3,15 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="projectTestCases.Login">
+      <class name="parallelTestCases.Login">
         <methods>
-          <include name="beforeTest"/>
-          <include name="extendreportgenerate"/>
-          <include name="closereport"/>
+          <include name="beforeMethod"/>
           <include name="logIn"/>
-          <include name="afterTest"/>
+          <include name="afterMethod"/>
         </methods>
-      </class> <!-- projectTestCases.Login -->
+      </class> <!-- parallelTestCases.Login -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

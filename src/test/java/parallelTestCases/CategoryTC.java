@@ -1,4 +1,4 @@
-package sequential;
+package parallelTestCases;
 
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -21,20 +21,30 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 
 public class CategoryTC {
-	WebDriver driver;
-	Login objLogin = new Login();
+	static WebDriver driver;
+	static String url = PropertyReadUtility.readConfigFile("login_url");
+	static String browser = PropertyReadUtility.readConfigFile("browser");
 	POMLogin objPomLogin;
-	POMUnits obPomUnits;
-
-	WaitUtility objWait;
 	POMCategory objpomCategory;
 
-	@Test(priority = 1, enabled = true, dataProvider = "testData")
+	@Test(priority = 1, enabled = true)
+	public void logIn() throws IOException {
+		String username = ExcelUtility.readStringData(1, 0);
+		String password = ExcelUtility.integerData(1, 1);
+		objPomLogin.loginVerification(username, password);
+
+		String current_url = driver.getCurrentUrl();
+		SoftAssert objassert = new SoftAssert();
+		objassert.assertEquals(PropertyReadUtility.readConfigFile("url"), current_url);
+		objassert.assertAll();
+	}
+
+	@Test(priority = 2, enabled = true, dataProvider = "testData")
 	public void add_category(String categoryName, String categoryCode) throws IOException, InterruptedException {
 
-		objpomCategory = new POMCategory(objLogin.driver);
-		objpomCategory.category_click();
+		objPomLogin.product_click();
 
+		objpomCategory.category_click();
 		objpomCategory.add_Category(categoryName, categoryCode);
 
 		String actual_message = "Category added successfully";
@@ -43,13 +53,15 @@ public class CategoryTC {
 		Assert.assertTrue(actual_message.contains(exp_message));
 	}
 
-	@Test(priority = 2, enabled = true)
+	@Test(priority = 3, enabled = true)
 	public void SearchCategory() throws InterruptedException {
 		boolean status = objpomCategory.Search_category(PropertyReadUtility.readConfigFile("category_test_data"));
-		Assert.assertEquals(status, true);
+		SoftAssert objassert = new SoftAssert();
+		objassert.assertEquals(status, true);
+		objassert.assertAll();
 	}
 
-	@Test(priority = 3, enabled = true)
+	@Test(priority = 4, enabled = true)
 	public void deleteCategory() throws InterruptedException {
 		objpomCategory.delete_category(PropertyReadUtility.readConfigFile("category_test_data"));
 
@@ -61,9 +73,18 @@ public class CategoryTC {
 
 	}
 
+	@BeforeTest
+	public void beforeTest() {
+		DriverUtility objDriverManager = new DriverUtility();
+		objDriverManager.launchBrowser(url, browser);
+		driver = objDriverManager.driver;
+		objPomLogin = new POMLogin(driver);
+		objpomCategory = new POMCategory(driver);
+	}
+
 	@AfterTest
 	public void afterTest() {
-		objLogin.driver.close();
+		driver.close();
 	}
 
 	@DataProvider(name = "testData")

@@ -1,4 +1,4 @@
-package crossBrowser;
+package parallelTestCases;
 
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -16,7 +16,6 @@ import utility.WaitUtility;
 
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 
 import java.io.IOException;
 
@@ -27,6 +26,7 @@ import org.testng.annotations.AfterTest;
 public class UnitTestCase extends ExtendTestManager {
 	static WebDriver driver;
 	static String url = PropertyReadUtility.readConfigFile("login_url");
+	static String browser = PropertyReadUtility.readConfigFile("browser");
 	POMLogin objPomLogin;
 	POMUnits objPomUnits;
 
@@ -81,9 +81,9 @@ public class UnitTestCase extends ExtendTestManager {
 	@Test(priority = 3, enabled = true)
 	public void search_units() throws InterruptedException {
 		boolean status = objPomUnits.searchUnits(PropertyReadUtility.readConfigFile("unit_test_data"));
-		SoftAssert asser = new SoftAssert();
-		asser.assertEquals(status, true);
-		asser.assertAll();
+		SoftAssert objassert = new SoftAssert();
+		objassert.assertEquals(status, true);
+		objassert.assertAll();
 
 	}
 
@@ -99,11 +99,10 @@ public class UnitTestCase extends ExtendTestManager {
 
 	}
 
-	@BeforeTest(alwaysRun = true)
-	@Parameters({ "browser2" })
-	public void beforeTest(String browser2) {
+	@BeforeTest
+	public void beforeTest() {
 		DriverUtility objDriverManager = new DriverUtility();
-		objDriverManager.launchBrowser(url, browser2);
+		objDriverManager.launchBrowser(url, browser);
 		driver = objDriverManager.driver;
 		objPomLogin = new POMLogin(driver);
 		objPomUnits = new POMUnits(driver);
@@ -120,9 +119,9 @@ public class UnitTestCase extends ExtendTestManager {
 
 	@DataProvider(name = "testdata")
 	public Object[][] TestDataFeed() {
-		// Create object array with 1 rows and 2 column- first parameter is row and
-		// second is //column
+
 		Object[][] unitsData = new Object[1][2];
+
 		// Enter data to row 0 column 0
 		unitsData[0][0] = "Test_unit";
 		// Enter data to row 0 column 1
